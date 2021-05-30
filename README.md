@@ -1,15 +1,31 @@
-# file_support
+# File Support 
 
-A new Flutter project.
+File support is plugin that allow you to perform file handling operations. Like convert file to multipart.Perform file related activities.
 
-## Getting Started
+- Get file name from file.
+- Convert file to multipart file
+- Create random file for testing puroses.
+- Create random image for flutter.
+- Get file extension from file.
 
-This project is a starting point for a Flutter
-[plug-in package](https://flutter.dev/developing-packages/),
-a specialized package that includes platform-specific implementation code for
-Android and/or iOS.
+####Get Multipart for Dio
+```dart
+await getMultiPartFromFile(File file) ;
+```
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+####Get File Name Without Extension.
+```dart
+ getFileNameWithoutExtension(File file) ;
+```
+
+####Get Base64 for any file.(Future)
+```dart
+ getBase64FromFile(File file)  ;
+```
+
+# Editor.md
+
+![](https://pandao.github.io/editor.md/images/logos/editormd-logo-180x180.png)
+
+![](https://img.shields.io/github/stars/pandao/editor.md.svg) ![](https://img.shields.io/github/forks/pandao/editor.md.svg) ![](https://img.shields.io/github/tag/pandao/editor.md.svg) ![](https://img.shields.io/github/release/pandao/editor.md.svg) ![](https://img.shields.io/github/issues/pandao/editor.md.svg) ![](https://img.shields.io/bower/v/editor.md.svg)
 
