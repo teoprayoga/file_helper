@@ -2,6 +2,9 @@ import 'dart:io';
 
 import 'package:file_support/file_support.dart';
 import 'package:flutter/material.dart';
+import 'package:dio/dio.dart';
+import 'package:http_parser/http_parser.dart';
+import 'package:mime_type/mime_type.dart';
 
 class FileDetails extends StatefulWidget {
   late File file;
@@ -21,6 +24,7 @@ class _FileDetailsState extends State<FileDetails> {
     super.initState();
     //setupFileData(widget. file);
     performBase64Test();
+    FileSupport().getMultiPartFromFile(widget.file);
   }
 
   @override
@@ -45,7 +49,7 @@ class _FileDetailsState extends State<FileDetails> {
           SizedBox(
             height: 50,
           ),
-          Text("File Size = ${FileSupport().getFileSize(file:widget.file)}"),
+          Text("File Size = ${FileSupport().getFileSize(file: widget.file)}"),
         ],
       ),
     );
@@ -63,6 +67,5 @@ class _FileDetailsState extends State<FileDetails> {
         base64string: string!, name: "test", extension: "jpg");
 
     print(file!.path);
-
   }
 }

@@ -8,7 +8,10 @@ import 'package:dio/dio.dart';
 import 'package:file_sizes/file_sizes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:http_parser/http_parser.dart' as http;
+import 'package:http_parser/http_parser.dart' as httparser;
+import 'package:http/http.dart' as http;
+import 'package:http_parser/http_parser.dart';
+import 'package:mime_type/mime_type.dart';
 import 'package:path_provider/path_provider.dart';
 import 'dart:ui';
 import 'dart:ui' as ui;
@@ -22,23 +25,52 @@ class FileSupport {
     return version;
   }
 */
-
-  Future<MultipartFile>? getMultiPartFromFile(File file) async {
+// This function is used for convert image file to Multipart to uplaod using Dio
+  Future<MultipartFile>? getMultiPartImage(File file) async {
     var pic = await MultipartFile.fromFile(file.path,
         filename: file.path.split("/").last,
         contentType:
-            http.MediaType.parse("image/${file.path.split(".").last}"));
+            httparser.MediaType.parse("image/${file.path.split(".").last}"));
     return pic;
   }
 
+  // its used to get multipart file from any extension.
+  Future<MultipartFile>? getMultiPartFromFile(File file) async {
+    String? mimeType = mime(file.absolute.path);
+    String mimee = mimeType!.split('/')[0];
+    String type = mimeType.split('/')[1];
+    print("MIME TYPE ${mimeType}  , ${mimee}, ${type} ");
+    var pic = await MultipartFile.fromFile(file.path,
+        filename: file.path.split("/").last,
+        contentType: MediaType(mimee, type));
+    return pic;
+  }
+
+  // This method user to get http multipart request file
+  Future<http.MultipartFile>? getHttpMutipartFile(
+      {required String field, required File file}) async {
+    String? mimeType = mime(file.absolute.path);
+    String mimee = mimeType!.split('/')[0];
+    String type = mimeType.split('/')[1];
+    print("MIME TYPE ${mimeType}  , ${mimee}, ${type} ");
+
+    var pic = http.MultipartFile.fromBytes('picture', file.readAsBytesSync(),
+        filename: file.path.split("/").last,
+        contentType: httparser.MediaType(mimee, type));
+    return pic;
+  }
+
+  // This function is used for get file name with extension
   String? getFileName(File file) {
     return file.path.split('/').last;
   }
 
+  // this function is used to get file name without extension
   String? getFileNameWithoutExtension(File file) {
     return file.path.split("/").last;
   }
 
+  // this function is used to convert any file to base 64 string
   Future<String?> getBase64FromFile(File file) async {
     Uint8List imageBytes = await file.readAsBytes();
     debugPrint(base64Encode(imageBytes));
@@ -46,6 +78,7 @@ class FileSupport {
     return base64String;
   }
 
+  //  this function convert base64 to file with 3 inputs base64 string , name for comming file, and extension
   Future<File?> getFileFromBase64(
       {required String base64string,
       required String name,
@@ -58,15 +91,16 @@ class FileSupport {
     return file;
   }
 
-  // get file size
+  // this function return size of any file in flutter
   String? getFileSize({required File file}) {
     print(file.lengthSync());
     return "${FileSize().getSize(file.lengthSync())}";
   }
 
+  // this function is used to generate random image for testing ui without adding images in asset folder
   void generateImage() async {
     final Random rd = new Random();
-    double kCanvasSize=500;
+    double kCanvasSize = 500;
     final color = Colors.primaries[rd.nextInt(Colors.primaries.length)];
 
     final recorder = ui.PictureRecorder();
@@ -94,7 +128,7 @@ class FileSupport {
     final picture = recorder.endRecording();
     final img = await picture.toImage(200, 200);
     final pngBytes = await img.toByteData(format: ImageByteFormat.png);
-  /*  setState(() {
+    /*  setState(() {
       imgBytes = pngBytes!;
     });*/
   }
