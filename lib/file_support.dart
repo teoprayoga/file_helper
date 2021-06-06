@@ -3,9 +3,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
 import 'dart:typed_data';
-
 import 'package:dio/dio.dart';
-import 'package:file_sizes/file_sizes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:http_parser/http_parser.dart' as httparser;
@@ -15,6 +13,8 @@ import 'package:mime_type/mime_type.dart';
 import 'package:path_provider/path_provider.dart';
 import 'dart:ui';
 import 'dart:ui' as ui;
+
+import 'dependency/filesize.dart';
 
 class FileSupport {
   static const MethodChannel _channel = const MethodChannel('file_support');
