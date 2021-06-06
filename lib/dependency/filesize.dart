@@ -1,15 +1,22 @@
-
-import 'package:file_support/dependency/type.dart';
+import 'type.dart';
 
 abstract class Sizes {
   String getBytes(int data);
+
   String getKiloBytes(int data, {PrecisionValue? value});
+
   String getMegaBytes(int data, {PrecisionValue? value});
+
   String getGigaBytes(int data, {PrecisionValue? value});
+
   String getTeraBytes(int data, {PrecisionValue? value});
+
   String getPetaBytes(int data, {PrecisionValue? value});
+
   String getExaBytes(int data, {PrecisionValue? value});
+
   String getZettaBytes(int data, {PrecisionValue? value});
+
   String getYottaBytes(int data, {PrecisionValue? value});
 }
 

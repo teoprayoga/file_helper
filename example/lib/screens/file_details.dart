@@ -24,6 +24,7 @@ class _FileDetailsState extends State<FileDetails> {
     super.initState();
     //setupFileData(widget. file);
     performBase64Test();
+    setupImageResolution();
     FileSupport().getMultiPartFromFile(widget.file);
   }
 
@@ -67,5 +68,10 @@ class _FileDetailsState extends State<FileDetails> {
         base64string: string!, name: "test", extension: "jpg");
 
     print(file!.path);
+  }
+
+  void setupImageResolution() async{
+    FileSupport().getImageReslution(widget.file);
+
   }
 }

@@ -1,6 +1,6 @@
 name: file_support
 description: File Support is plugin very helpful for different kind of file handling operations.Like generate multipart files.Create custom file,get file properties like size,type,name etc.Also include special file to base64 support and lots more.
-version: 0.0.4
+version: 0.0.5
 
 homepage: https://github.com/parmeetmaster/file_support.git
 
@@ -18,6 +18,7 @@ dependencies:
   http: ^0.13.3
   uuid: ^3.0.4
   mime_type: ^1.0.0
+
 
 
 dev_dependencies:

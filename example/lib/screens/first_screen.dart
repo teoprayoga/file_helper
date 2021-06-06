@@ -23,10 +23,10 @@ class _FirstScreenState extends State<FirstScreen> {
       body: ListView(
         children: [
           ElevatedButton(
-              onPressed: ()  {
-                move_to_next_screen();
-              },
-              child: Text("Click to pick file"))
+           onPressed: ()  {
+             move_to_next_screen();
+           },
+           child: Text("Click to pick file"))
         ],
       ),
     );
