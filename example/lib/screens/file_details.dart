@@ -18,14 +18,17 @@ class FileDetails extends StatefulWidget {
 }
 
 class _FileDetailsState extends State<FileDetails> {
+  File? compressimage = null;
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     //setupFileData(widget. file);
-    performBase64Test();
-    setupImageResolution();
-    FileSupport().getMultiPartFromFile(widget.file);
+  /*  performBase64Test();
+    setupImageResolution();*/
+    performImageTest();
+   /* FileSupport().getMultiPartFromFile(widget.file);*/
   }
 
   @override
@@ -51,6 +54,10 @@ class _FileDetailsState extends State<FileDetails> {
             height: 50,
           ),
           Text("File Size = ${FileSupport().getFileSize(file: widget.file)}"),
+          SizedBox(
+            height: 10,
+          ),
+          if (compressimage != null) Image.file(compressimage!)
         ],
       ),
     );
@@ -70,8 +77,12 @@ class _FileDetailsState extends State<FileDetails> {
     print(file!.path);
   }
 
-  void setupImageResolution() async{
+  void setupImageResolution() async {
     FileSupport().getImageReslution(widget.file);
+  }
 
+  void performImageTest() async {
+    compressimage = await FileSupport().compressImage(widget.file);
+    setState(() {});
   }
 }
