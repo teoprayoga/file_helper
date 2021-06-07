@@ -102,7 +102,10 @@ File is required, quality determines image size.
 ```dart
   Future<File?> compressImage(File file,{int? quality,int? rotate})
 ```
->  return object is File. If user get null file incase of wrong file added except images
+ return object is File. If user get null file incase of wrong file added except images
+
+------------
+
 
 ### Features and bugs
 Please file feature requests and bugs at the[ issue tracker](https://github.com/parmeetmaster/file_support/issueshttp:// " issue tracker").
