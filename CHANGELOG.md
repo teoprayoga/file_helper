@@ -1,4 +1,8 @@
 
+## 1.0.2
+##### General
+- Compression added,Base64 image support,File size,name,types with few bug fixed.
+
 ## 1.0.0
 ##### General
 - Compression added,Base64 image support,File size,name,types.

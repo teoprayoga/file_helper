@@ -92,20 +92,16 @@ Future<FileData>getImageReslution(File file)
 File support this feature help you know about file type like image,zip etc..
 ```dart
 getFileType(File? file)
-> ```
- return object is String with image type.
+```
+>  return object is String with image type.tion.
 
-** Compress File **
+**Compress Image**
 File support this feature help you get Compress Images in order to uplaod,
 File is required, quality determines image size.
-
 ```dart
   Future<File?> compressImage(File file,{int? quality,int? rotate})
 ```
- return object is File. If user get null file incase of wrong file added except images
-
-------------
-
+>  return object is File. If user get null file incase of wrong file added except images
 
 ### Features and bugs
 Please file feature requests and bugs at the[ issue tracker](https://github.com/parmeetmaster/file_support/issueshttp:// " issue tracker").
@@ -114,4 +110,5 @@ Please file feature requests and bugs at the[ issue tracker](https://github.com/
 ![](https://pandao.github.io/editor.md/images/logos/editormd-logo-180x180.png)
 
 ![](https://img.shields.io/github/issues/parmeetmaster/file_support) ![](	https://img.shields.io/github/forks/parmeetmaster/file_support) ![](	https://img.shields.io/github/stars/parmeetmaster/file_support) ![](https://img.shields.io/github/license/parmeetmaster/file_support) 
+
 

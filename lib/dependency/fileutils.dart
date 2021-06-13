@@ -34,7 +34,7 @@ mixin FileUtils {
     String mimee = mimeType!.split('/')[0];
     String type = mimeType.split('/')[1];
     "MIME TYPE ${mimeType}  , ${mimee}, ${type} ".printinfo;
-    return type;
+    return mimee;
   }
 
   /// its used to get multipart file from any extension.
