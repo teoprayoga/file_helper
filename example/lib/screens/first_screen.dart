@@ -1,5 +1,3 @@
-
-
 import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
@@ -23,19 +21,19 @@ class _FirstScreenState extends State<FirstScreen> {
       body: ListView(
         children: [
           ElevatedButton(
-           onPressed: ()  {
-             move_to_next_screen();
-           },
-           child: Text("Click to pick file"))
+              onPressed: () {
+                move_to_next_screen();
+              },
+              child: Text("Click to pick file"))
         ],
       ),
     );
   }
-  void move_to_next_screen() async{
+
+  void move_to_next_screen() async {
     FilePickerResult? result = await FilePicker.platform.pickFiles();
     File file = File(result!.files.single.path!);
     Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => FileDetails(file)));
+        context, MaterialPageRoute(builder: (context) => FileDetails(file)));
   }
 }

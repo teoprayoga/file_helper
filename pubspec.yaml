@@ -21,6 +21,7 @@ dependencies:
   dependencies:
   flutter_image_compress: ^1.0.0
   path: ^1.8.0
+  permission_handler: ^8.1.0
 
 
 

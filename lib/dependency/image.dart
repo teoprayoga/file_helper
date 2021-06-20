@@ -41,11 +41,12 @@ mixin ImageOperations {
 
   /// This function is used to get compress image
 
-  Future<File?> compressImage(File file,{int? quality=50,int? rotate=0}) async {
+  Future<File?> compressImage(File file,
+      {int? quality = 50, int? rotate = 0}) async {
     String? str = FileSupport().getFileExtension(file);
 
     ("The file extension of image" + str!).printinfo;
-    if(FileSupport().getFileType(file).toLowerCase()!="image"){
+    if (FileSupport().getFileType(file).toLowerCase() != "image") {
       "Only Images are used for compression".printinfo;
       return null;
     }

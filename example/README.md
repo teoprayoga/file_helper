@@ -10,6 +10,29 @@ File support is plugin that allow you to perform file handling operations. Like 
 - **Get file extension from file.**
 - **Add Image Compression**
 
+### Dependencies 
+
+If you are using file handling operations like adding file to external directory like DOWNLOADS,DCIM, etc.
+
+**For Android:**
+
+```xml
+<manifest ... >
+<!-- This attribute is "false" by default on apps targeting
+     Android 10 or higher. -->
+  <application android:requestLegacyExternalStorage="true" ... >
+
+<uses-permission android:name="android.permission.INTERNET" />
+<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+ <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+
+</application>
+</manifest>
+
+```
+
+### Methods Support 
+
 **Get Multipart for Dio**
 Speciallity is that no need to define mime.It simply return any file to multipart to sent multipart object on dio request
 ```dart
@@ -92,19 +115,20 @@ Future<FileData>getImageReslution(File file)
 File support this feature help you know about file type like image,zip etc..
 ```dart
 getFileType(File? file)
-> ```
- return object is String with image type.
+```
+>  return object is String with image type.tion.
 
-** Compress File **
+**Compress Image**
 File support this feature help you get Compress Images in order to uplaod,
 File is required, quality determines image size.
-
 ```dart
   Future<File?> compressImage(File file,{int? quality,int? rotate})
 ```
- return object is File. If user get null file incase of wrong file added except images
+>  return object is File. If user get null file incase of wrong file added except images
 
-------------
+
+
+
 
 
 ### Features and bugs
@@ -114,4 +138,5 @@ Please file feature requests and bugs at the[ issue tracker](https://github.com/
 ![](https://pandao.github.io/editor.md/images/logos/editormd-logo-180x180.png)
 
 ![](https://img.shields.io/github/issues/parmeetmaster/file_support) ![](	https://img.shields.io/github/forks/parmeetmaster/file_support) ![](	https://img.shields.io/github/stars/parmeetmaster/file_support) ![](https://img.shields.io/github/license/parmeetmaster/file_support) 
+
 

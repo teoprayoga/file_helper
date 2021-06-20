@@ -10,7 +10,7 @@ import 'dart:async';
 import 'package:flutter/services.dart';
 import 'package:file_support/file_support.dart';
 
-void main() {
+void main() async {
   runApp(MyApp());
 }
 
@@ -28,10 +28,8 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-     // home:ImageGenerator() ,
-      home:FirstScreen() ,
+      // home:ImageGenerator() ,
+      home: FirstScreen(),
     );
   }
-
-
 }

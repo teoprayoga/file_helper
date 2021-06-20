@@ -59,7 +59,7 @@ class _ImageGeneratorState extends State<ImageGenerator> {
     final canvas = Canvas(
         recorder,
         Rect.fromPoints(
-            Offset(0.0, 0.0), Offset(kCanvasSize, kCanvasSize+400 )));
+            Offset(0.0, 0.0), Offset(kCanvasSize, kCanvasSize + 400)));
 
     final stroke = Paint()
       ..color = Colors.grey

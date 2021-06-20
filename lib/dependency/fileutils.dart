@@ -1,7 +1,10 @@
 import 'dart:io';
 
+import 'package:file_support/dependency/type.dart';
+import 'package:file_support/file_support.dart';
 import 'package:logger/logger.dart';
 import 'package:mime_type/mime_type.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:uuid/uuid.dart';
 import 'package:uuid/uuid_util.dart';
 import '../utils/utils.dart';
@@ -18,7 +21,7 @@ import 'package:http_parser/http_parser.dart' as httparser;
 import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
 import 'package:mime_type/mime_type.dart';
-import 'package:path_provider/path_provider.dart';
+import 'package:path_provider/path_provider.dart' as pp;
 import 'dart:ui';
 import 'dart:ui' as ui;
 import 'package:path/path.dart' as p;
@@ -68,7 +71,12 @@ mixin FileUtils {
     return file.path.split('/').last;
   }
 
-  // This is used to get file extension
+  /// This function is used for get file name with extension from text ***************
+  String? getFileNameFromText(String text) {
+    return text.split('/').last;
+  }
+
+  /// This is used to get file extension
   String? getFileExtension(File file) {
     return p.extension(file.path, 2);
   }
@@ -92,7 +100,7 @@ mixin FileUtils {
       required String name,
       required String extension}) async {
     final decodedBytes = base64Decode(base64string);
-    Directory tempdirectory = await getTemporaryDirectory();
+    Directory tempdirectory = await pp.getTemporaryDirectory();
 
     File file = File("${tempdirectory.path}/${name}.${extension}");
     file.writeAsBytes(decodedBytes);
@@ -110,7 +118,7 @@ mixin FileUtils {
       {ByteData? data, String? extension = ""}) async {
     if (data == null) return null;
     final buffer = data.buffer;
-    Directory tempDir = await getTemporaryDirectory();
+    Directory tempDir = await pp.getTemporaryDirectory();
     String tempPath = tempDir.path;
     String uuid = Uuid().v4();
     var filePath = tempPath + '/${uuid}.${extension}';
@@ -122,11 +130,293 @@ mixin FileUtils {
   Future<File?> writeUint8ListtoTemporaryDirectory(
       {Uint8List? data, String? extension = ""}) async {
     if (data == null) return null;
-    Directory tempDir = await getTemporaryDirectory();
+    Directory tempDir = await pp.getTemporaryDirectory();
     String tempPath = tempDir.path;
     String uuid = Uuid().v4();
     var filePath = tempPath + '/${uuid}.${extension}';
     return new File(filePath).writeAsBytes(data);
+  }
+
+  /// This function used for downlaod file from url and use locally for serveral purposes
+  /// url is http location where file avaiblable for downlaod
+  /// Progress is callback tell about download progress
+  /// Storage directory tell where to download file currruntly avaiable for android devices only
+  Future<File?> downloadFile(
+      {String? url,
+      Function(String)? progress,
+      pp.StorageDirectory? storageDirectory}) async {
+    Dio dio = new Dio();
+
+    if (url == null) {
+      "Download Location cant be null".printerror;
+      return null;
+    }
+
+    List<Directory>? tempDir =
+        await pp.getExternalStorageDirectories(type: storageDirectory);
+
+    String? urlFileType = getUrlFileExtension(url);
+
+    String fullPath = tempDir!.first.path + "/${Uuid().v4()}${urlFileType}";
+    fullPath.printinfo;
+    File file = new File("");
+    try {
+      Response response = await dio.get(
+        url,
+        onReceiveProgress: (received, total) {
+          if (total != -1) {
+            if (progress != null)
+              progress((received / total * 100).toStringAsFixed(0) + "%");
+          }
+        },
+        //Received data with List<int>
+        options: Options(
+            responseType: ResponseType.bytes,
+            followRedirects: false,
+            validateStatus: (status) {
+              return status! < 500;
+            }),
+      );
+      print(response.headers);
+      file = File(fullPath);
+      var raf = file.openSync(mode: FileMode.write);
+      // response.data is List<int> type
+      raf.writeFromSync(response.data);
+      await raf.close();
+    } catch (e) {
+      print(e);
+      return null;
+    }
+    return file;
+  }
+
+  /// use to download file download folder ******************
+  Future<File?> downloadFileInDownloadFolderAndroid(
+      {required String? url,
+      Function(String)? progress,
+      required String filename,
+      required String extension}) async {
+    String? android_path = "${await getDownloadFolderPath()}/";
+    File? file = await downloadCustomLocation(
+        url: url, path: android_path, filename: filename, extension: extension,progress: progress);
+    return file;
+  }
+
+  /// this is used to download any location in as per user wants
+  /// in case directory not exist it will create automatically
+  Future<File?> downloadCustomLocation(
+      {required String? url,
+      Function(String)? progress,
+      required String filename,
+      required String extension,
+      required path}) async {
+    Dio dio = new Dio();
+
+    if (url == null) {
+      "Download Location cant be null".printerror;
+      return null;
+    }
+
+    String? android_path = path;
+    android_path!.printwarn;
+
+    Directory directory=await new Directory(android_path);
+    // create directory if not exist
+    if (!await directory.exists()) {
+      await directory.create(recursive: true);
+    }
+    directory;
+
+    String fullPath = android_path+filename + "${extension}";
+    fullPath.printinfo;
+    File file = new File("");
+    try {
+      Response response = await dio.get(
+        url,
+        onReceiveProgress: (received, total) {
+          if (total != -1) {
+            if (progress != null)
+              progress((received / total * 100).toStringAsFixed(0) + "%");
+          }
+        },
+        //Received data with List<int>
+        options: Options(
+            responseType: ResponseType.bytes,
+            followRedirects: false,
+            validateStatus: (status) {
+              return status! < 500;
+            }),
+      );
+      print(response.headers);
+      file = File(fullPath);
+      var raf = file.openSync(mode: FileMode.write);
+      // response.data is List<int> type
+      raf.writeFromSync(response.data);
+      await raf.close();
+    } catch (e) {
+      print(e);
+    }
+    return file;
+  }
+
+  Future<bool> requestPermission(Permission permission) async {
+    if (await permission.isGranted) {
+      return true;
+    } else {
+      var result = await permission.request();
+      if (result == PermissionStatus.granted) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  /// This tell user about where is download directory located in flutter ****************
+  Future<String?>? getDownloadFolderPath() async {
+    Directory? directory;
+
+    try {
+      if (Platform.isAndroid) {
+        if (await requestPermission(Permission.storage)) {
+          directory = (await pp.getExternalStorageDirectory())!;
+          String newPath = "";
+          print(directory);
+          List<String> paths = directory.path.split("/");
+          for (int x = 1; x < paths.length; x++) {
+            String folder = paths[x];
+            if (folder != "Android") {
+              newPath += "/" + folder;
+            } else {
+              break;
+            }
+          }
+          newPath = newPath + "/Download";
+          directory = Directory(newPath);
+        } else {
+          return "";
+        }
+      } else {
+        if (await requestPermission(Permission.photos)) {
+          directory = await pp.getApplicationDocumentsDirectory();
+        } else {
+          return "";
+        }
+      }
+
+      if (!await directory.exists()) {
+        await directory.create(recursive: true);
+      }
+      if (await directory.exists()) {
+        return directory.path;
+      }
+    } catch (e) {
+      print(e);
+    }
+    if (directory == null) return null;
+
+    return directory.path;
+  }
+
+  /// This tell user about where root directory located in flutter ****************
+  Future<String?>? getRootFolderPath() async {
+    Directory? directory;
+
+    try {
+      if (Platform.isAndroid) {
+        if (await requestPermission(Permission.storage)) {
+          directory = (await pp.getExternalStorageDirectory())!;
+          String newPath = "";
+          print(directory);
+          List<String> paths = directory.path.split("/");
+          for (int x = 1; x < paths.length; x++) {
+            String folder = paths[x];
+            if (folder != "Android") {
+              newPath += "/" + folder;
+            } else {
+              break;
+            }
+          }
+          directory = Directory(newPath);
+        } else {
+          return "";
+        }
+      } else {
+        if (await requestPermission(Permission.photos)) {
+          directory = await pp.getApplicationDocumentsDirectory();
+        } else {
+          return "";
+        }
+      }
+
+  /*    if (!await directory.exists()) {
+        await directory.create(recursive: true);
+      }
+      if (await directory.exists()) {
+        return directory.path;
+      }*/
+    } catch (e) {
+      print(e);
+    }
+    if (directory == null) return null;
+
+    return directory.path;
+  }
+
+
+  /// https://retroportalstudio.medium.com/saving-files-to-application-folder-and-gallery-in-flutter-e9be2ebee92a
+  Future<File?> downloadFileIos(
+      {String? url,
+      Function(String)? progress,
+      pp.StorageDirectory? storageDirectory}) async {
+    Dio dio = new Dio();
+
+    if (url == null) {
+      "Download Location cant be null".printerror;
+      return null;
+    }
+
+    Directory? tempDir = await pp.getExternalStorageDirectory();
+
+    String? urlFileType = getUrlFileExtension(url);
+
+    String fullPath = tempDir!.path + "/${Uuid().v4()}${urlFileType}";
+    fullPath.printinfo;
+    File file = new File("");
+    try {
+      Response response = await dio.get(
+        url,
+        onReceiveProgress: (received, total) {
+          if (total != -1) {
+            if (progress != null)
+              progress((received / total * 100).toStringAsFixed(0) + "%");
+          }
+        },
+        //Received data with List<int>
+        options: Options(
+            responseType: ResponseType.bytes,
+            followRedirects: false,
+            validateStatus: (status) {
+              return status! < 500;
+            }),
+      );
+      print(response.headers);
+      file = File(fullPath);
+      fullPath.printwarn;
+      var raf = file.openSync(mode: FileMode.write);
+      // response.data is List<int> type
+      raf.writeFromSync(response.data);
+      await raf.close();
+    } catch (e) {
+      print(e);
+      return null;
+    }
+    return file;
+  }
+
+
+  // This is used to get file extension ********
+  String? getUrlFileExtension(String url) {
+    return p.extension(url, 2);
   }
 
   /// pending add on git
