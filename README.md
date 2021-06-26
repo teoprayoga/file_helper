@@ -1,6 +1,8 @@
 # File Support 
 
-File support is plugin that allow you to perform file handling operations. Like convert file to multipart.File support also help file to upload via base64.File support have most reliable compression algorithm to compress image.
+File support is plugin that allow you to perform file handling operations. Like convert file to multipart.File support also help file to upload via base64.File support have most reliable compression algorithm to compress image.It also allow user to download files from any url.
+
+## Features
 
 - **Get file name from file.**
 - **Convert file to multipart file**
@@ -9,6 +11,31 @@ File support is plugin that allow you to perform file handling operations. Like 
 - **Extract all information about file like Name,Type,Size etc.**
 - **Get file extension from file.**
 - **Add Image Compression**
+- **Download Files**
+
+
+**Permission Required for purposes to download Files in Ios Info.plist**
+```swift
+<key>NSAllowsArbitraryLoads</key>
+    <true/>
+    <key>LSSupportsOpeningDocumentsInPlace</key>
+    <true/>
+    <key>UIFileSharingEnabled</key>
+    <true/>
+```
+
+**Permission Required for purposes to download Files in Android Manifest**
+```dart
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.INTERNET" />
+```
+
+
+------------
+
+
+
 
 **Get Multipart for Dio**
 Speciallity is that no need to define mime.It simply return any file to multipart to sent multipart object on dio request
@@ -103,8 +130,61 @@ File is required, quality determines image size.
 ```
 >  return object is File. If user get null file incase of wrong file added except images
 
+**Download File to store as per custom Location**
+This feature allow user to download file.You can replace path with path provider with getApplicationDirectory. using https://pub.dev/packages/path_provider
+
+```dart
+  Future<File?> downloadCustomLocation(
+      {required String? url,
+      Function(String)? progress,
+      required String filename,
+      required String extension,
+      required path}) 
+```
+**Example**
+```dart
+   String? android_path = "${await FileSupport().getRootFolderPath()}/GHMC/";
+    File? file = await FileSupport().downloadCustomLocation(
+        url: "https://www.rmp-streaming.com/media/big-buck-bunny-360p.mp4",
+        path: android_path, filename: "Progress", extension: ".mp4",progress: (progress){
+          print(progress)
+    });
+```
+>  return object is File. If user get null file incase of download may not complete
+
+
+**Download File only Download Folder Android**
+This feature allow user to download file.
+
+```dart
+  Future<File?> downloadFileInDownloadFolderAndroid(
+      {required String? url,
+      Function(String)? progress,
+      required String filename,
+      required String extension}) async 
+```
+**Example**
+```dart
+ File? file = await FileSupport().downloadFileInDownloadFolderAndroid(
+        url: "https://www.rmp-streaming.com/media/big-buck-bunny-360p.mp4",
+       filename: "Progress", extension: ".mp4",progress: (p){
+          p.printinfo;
+    });
+```
+>  return object is File. If user get null file incase of download may not complete
+
+
+**Get Download Directory**
+
+File Support this feature allow user to get download folder path of any android device and ios device application directory path
+
+```dart
+Future<String?>? getDownloadFolderPath() 
+```
+>  return object is String.
+
 ### Features and bugs
-Please file feature requests and bugs at the[ issue tracker](https://github.com/parmeetmaster/file_support/issueshttp:// " issue tracker").
+Please file feature requests and bugs at the [issue tracker](https://github.com/parmeetmaster/file_support/issues "issue tracker")
 # Editor.md
 
 ![](https://pandao.github.io/editor.md/images/logos/editormd-logo-180x180.png)

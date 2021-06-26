@@ -166,7 +166,7 @@ mixin FileUtils {
         onReceiveProgress: (received, total) {
           if (total != -1) {
             if (progress != null)
-              progress((received / total * 100).toStringAsFixed(0) + "%");
+              progress((received / total * 100).toStringAsFixed(0));
           }
         },
         //Received data with List<int>
@@ -190,7 +190,7 @@ mixin FileUtils {
     return file;
   }
 
-  /// use to download file download folder ******************
+  /// use to download file download folder
   Future<File?> downloadFileInDownloadFolderAndroid(
       {required String? url,
       Function(String)? progress,
@@ -198,7 +198,11 @@ mixin FileUtils {
       required String extension}) async {
     String? android_path = "${await getDownloadFolderPath()}/";
     File? file = await downloadCustomLocation(
-        url: url, path: android_path, filename: filename, extension: extension,progress: progress);
+        url: url,
+        path: android_path,
+        filename: filename,
+        extension: extension,
+        progress: progress);
     return file;
   }
 
@@ -220,14 +224,14 @@ mixin FileUtils {
     String? android_path = path;
     android_path!.printwarn;
 
-    Directory directory=await new Directory(android_path);
+    Directory directory = await new Directory(android_path);
     // create directory if not exist
     if (!await directory.exists()) {
       await directory.create(recursive: true);
     }
     directory;
 
-    String fullPath = android_path+filename + "${extension}";
+    String fullPath = android_path + filename + "${extension}";
     fullPath.printinfo;
     File file = new File("");
     try {
@@ -236,7 +240,7 @@ mixin FileUtils {
         onReceiveProgress: (received, total) {
           if (total != -1) {
             if (progress != null)
-              progress((received / total * 100).toStringAsFixed(0) + "%");
+              progress((received / total * 100).toStringAsFixed(0));
           }
         },
         //Received data with List<int>
@@ -271,7 +275,7 @@ mixin FileUtils {
     return false;
   }
 
-  /// This tell user about where is download directory located in flutter ****************
+  /// This tell user about where is download directory located in flutter
   Future<String?>? getDownloadFolderPath() async {
     Directory? directory;
 
@@ -348,7 +352,7 @@ mixin FileUtils {
         }
       }
 
-  /*    if (!await directory.exists()) {
+      /*    if (!await directory.exists()) {
         await directory.create(recursive: true);
       }
       if (await directory.exists()) {
@@ -361,7 +365,6 @@ mixin FileUtils {
 
     return directory.path;
   }
-
 
   /// https://retroportalstudio.medium.com/saving-files-to-application-folder-and-gallery-in-flutter-e9be2ebee92a
   Future<File?> downloadFileIos(
@@ -388,7 +391,7 @@ mixin FileUtils {
         onReceiveProgress: (received, total) {
           if (total != -1) {
             if (progress != null)
-              progress((received / total * 100).toStringAsFixed(0) + "%");
+              progress((received / total * 100).toStringAsFixed(0));
           }
         },
         //Received data with List<int>
@@ -412,7 +415,6 @@ mixin FileUtils {
     }
     return file;
   }
-
 
   // This is used to get file extension ********
   String? getUrlFileExtension(String url) {

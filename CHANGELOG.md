@@ -1,4 +1,12 @@
 
+## 1.0.3
+##### General
+- Download Ability and removal of percentage symbol
+
+## 1.0.2
+##### General
+- Download Ability Added for download files
+
 ## 1.0.2
 ##### General
 - Compression added,Base64 image support,File size,name,types with few bug fixed.

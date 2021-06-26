@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:file_support/file_support.dart';
 import 'package:flutter/material.dart';
 import 'package:file_support/utils/utils.dart';
+
 class FileDetails extends StatefulWidget {
   late File file;
 
@@ -25,7 +26,7 @@ class _FileDetailsState extends State<FileDetails> {
     /*  performBase64Test();
     setupImageResolution();*/
     performImageTest();
-   // downloadFile();
+    // downloadFile();
 
     /* FileSupport().getMultiPartFromFile(widget.file);*/
   }
@@ -60,10 +61,11 @@ class _FileDetailsState extends State<FileDetails> {
           SizedBox(
             height: 10,
           ),
-          ElevatedButton(onPressed: (){
-            downloadFileandStoreInDownloadFolder();
-          }, child: Text("Download File and Store in download Folder"))
-
+          ElevatedButton(
+              onPressed: () {
+                downloadFileandStoreInDownloadFolder();
+              },
+              child: Text("Download File and Store in download Folder"))
         ],
       ),
     );
@@ -102,16 +104,16 @@ class _FileDetailsState extends State<FileDetails> {
     print("download file size ${FileSupport().getFileSize(file: file!)}");
   }
 
-
   void downloadFileandStoreInDownloadFolder() async {
-
-
     String? android_path = "${await FileSupport().getRootFolderPath()}/GHMC/";
     File? file = await FileSupport().downloadCustomLocation(
         url: "https://www.rmp-streaming.com/media/big-buck-bunny-360p.mp4",
-        path: android_path, filename: "Progress", extension: ".mp4",progress: (p){
+        path: android_path,
+        filename: "Progress",
+        extension: ".mp4",
+        progress: (p) {
           p.printinfo;
-    });
+        });
 
     print("download file size ${FileSupport().getFileSize(file: file!)}");
   }
