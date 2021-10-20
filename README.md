@@ -26,6 +26,21 @@ File support is plugin that allow you to perform file handling operations. Like 
 
 **Permission Required for purposes to download Files in Android Manifest**
 ```dart
+   <application
+        android:label=""
+         android:requestLegacyExternalStorage="true" <===== ADD This line
+        android:icon="@mipmap/ic_launcher">   <application
+        android:label=""
+        android:icon="@mipmap/ic_launcher">
+```
+  android:requestLegacyExternalStorage="true" <== carefully add in appliction section of manifiest xml. If you are download file for download folder.
+
+
+**Also Add this :**
+
+These are following permission for download file required for android devices.
+
+```dart
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.INTERNET" />
