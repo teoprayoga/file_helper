@@ -1,6 +1,6 @@
 name: file_support
 description: File Support is plugin very helpful for different kind of file handling operations.Its used create, update, get information about file.
-version: 1.0.3+3
+version: 1.0.3+4
 
 homepage: https://github.com/parmeetmaster/file_support.git
 
@@ -20,7 +20,7 @@ dependencies:
   mime_type: ^1.0.0
   flutter_image_compress: ^1.0.0
   path: ^1.8.0
-  permission_handler: ^8.1.2
+  permission_handler: ^8.2.5
 
 dev_dependencies:
   flutter_test:
