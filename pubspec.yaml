@@ -1,6 +1,6 @@
 name: file_support
 description: File Support is plugin very helpful for different kind of file handling operations.Its used create, update, get information about file.
-version: 1.0.4+5
+version: 1.0.6
 
 homepage: https://github.com/parmeetmaster/file_support.git
 
