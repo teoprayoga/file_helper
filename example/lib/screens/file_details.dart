@@ -17,6 +17,7 @@ class FileDetails extends StatefulWidget {
 
 class _FileDetailsState extends State<FileDetails> {
   File? compressimage = null;
+  String? base64text = "";
 
   @override
   void initState() {
@@ -29,6 +30,16 @@ class _FileDetailsState extends State<FileDetails> {
     // downloadFile();
 
     /* FileSupport().getMultiPartFromFile(widget.file);*/
+    _setBase64();
+  }
+
+  _setBase64() async {
+    base64text =  await  FileSupport().getBase64FromFile(widget.file);
+    setState(() {
+
+    });
+
+
   }
 
   @override
@@ -46,10 +57,7 @@ class _FileDetailsState extends State<FileDetails> {
           ),
           Text(
               "File name without Extension = ${FileSupport().getFileNameWithoutExtension(widget.file)}"),
-          SizedBox(
-            height: 50,
-          ),
-          Text("File base64 = ${FileSupport().getBase64FromFile(widget.file)}"),
+
           SizedBox(
             height: 50,
           ),
@@ -61,11 +69,16 @@ class _FileDetailsState extends State<FileDetails> {
           SizedBox(
             height: 10,
           ),
+
           ElevatedButton(
               onPressed: () {
                 downloadFileandStoreInDownloadFolder();
               },
-              child: Text("Download File and Store in download Folder"))
+              child: Text("Download File and Store in download Folder")),
+          SizedBox(
+            height: 50,
+          ),
+          Text("File base64 = ${base64text}"),
         ],
       ),
     );

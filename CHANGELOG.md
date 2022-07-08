@@ -1,3 +1,6 @@
+## 1.0.4
+##### General
+- 3.0.4 stable compatability added
 
 ## 1.0.3
 ##### General
