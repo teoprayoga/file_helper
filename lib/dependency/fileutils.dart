@@ -152,10 +152,8 @@ mixin FileUtils {
       return null;
     }
 
-//     List<Directory>? tempDir =
-//         await pp.getExternalStorageDirectories(type: storageDirectory);
-    
-    List<Directory>? tempDir = await pp.getTemporaryDirectory();    
+    List<Directory>? tempDir =
+        await pp.getExternalStorageDirectories(type: storageDirectory);
 
     String? urlFileType = getUrlFileExtension(url);
 
@@ -372,7 +370,9 @@ mixin FileUtils {
   Future<File?> downloadFileIos(
       {String? url,
       Function(String)? progress,
-      pp.StorageDirectory? storageDirectory}) async {
+      pp.StorageDirectory? storageDirectory,
+       directory,
+      }) async {
     Dio dio = new Dio();
 
     if (url == null) {
@@ -380,8 +380,7 @@ mixin FileUtils {
       return null;
     }
 
-//     Directory? tempDir = await pp.getExternalStorageDirectory();
-    Directory? tempDir = await pp.getTemporaryDirectory();
+    Directory? tempDir = directory ?? await pp.getExternalStorageDirectory();
 
     String? urlFileType = getUrlFileExtension(url);
 
