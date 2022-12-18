@@ -152,8 +152,10 @@ mixin FileUtils {
       return null;
     }
 
-    List<Directory>? tempDir =
-        await pp.getExternalStorageDirectories(type: storageDirectory);
+//     List<Directory>? tempDir =
+//         await pp.getExternalStorageDirectories(type: storageDirectory);
+    
+    List<Directory>? tempDir = await pp.getTemporaryDirectory();    
 
     String? urlFileType = getUrlFileExtension(url);
 
@@ -378,7 +380,8 @@ mixin FileUtils {
       return null;
     }
 
-    Directory? tempDir = await pp.getExternalStorageDirectory();
+//     Directory? tempDir = await pp.getExternalStorageDirectory();
+    Directory? tempDir = await pp.getTemporaryDirectory();
 
     String? urlFileType = getUrlFileExtension(url);
 
